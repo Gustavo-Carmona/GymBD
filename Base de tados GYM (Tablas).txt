@@ -1,0 +1,267 @@
+-- Tabla administrador
+CREATE TABLE administrador (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre VARCHAR(20),
+    Contrasena VARCHAR(20)
+);
+
+-- Tabla persona (supertabla de cliente y empleado)
+CREATE TABLE persona (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre VARCHAR(50),
+    Apellido VARCHAR(50),
+    FechaNacimiento DATE,
+    Direccion VARCHAR(100),
+    Telefono VARCHAR(15),
+    Email VARCHAR(50)
+);
+
+-- Tabla cliente (subtabla de persona)
+CREATE TABLE cliente (
+    id INT PRIMARY KEY,
+    fechaRegistro DATE,
+    id_plan INT,
+    FOREIGN KEY (id) REFERENCES persona(id),
+    FOREIGN KEY (id_plan) REFERENCES plan(id)
+);
+
+-- Tabla empleado (subtabla de persona)
+CREATE TABLE empleado (
+    id INT PRIMARY KEY,
+    puesto VARCHAR(50),
+    salario DECIMAL(10, 2),
+    fechaContratacion DATE,
+    FOREIGN KEY (id) REFERENCES persona(id)
+);
+
+-- Tabla plan
+CREATE TABLE plan (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50),
+    costo DECIMAL(10, 2),
+    duracionMeses INT
+);
+
+-- Tabla promocion
+CREATE TABLE promocion (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    descripcion VARCHAR(100),
+    descuento DECIMAL(5, 2),
+    fechaInicio DATE,
+    fechaFin DATE
+);
+
+-- Tabla cliente_promocion (asociación entre cliente y promocion)
+CREATE TABLE cliente_promocion (
+    id_cliente INT,
+    id_promocion INT,
+    PRIMARY KEY (id_cliente, id_promocion),
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id),
+    FOREIGN KEY (id_promocion) REFERENCES promocion(id)
+);
+
+-- Tabla fichaMedica (para el seguimiento de salud de los clientes)
+CREATE TABLE fichaMedica (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_cliente INT,
+    peso DECIMAL(5, 2),
+    talla DECIMAL(5, 2),
+    porcentajeGrasaCorporal DECIMAL(5, 2),
+    fechaRegistro DATE,
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id)
+);
+
+-- Tabla area (para las áreas dentro del gimnasio)
+CREATE TABLE area (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50),
+    descripcion VARCHAR(100)
+);
+
+-- Tabla maquina (para los equipos de gimnasio)
+CREATE TABLE maquina (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50),
+    id_area INT,
+    fechaAdquisicion DATE,
+    FOREIGN KEY (id_area) REFERENCES area(id)
+);
+
+-- Tabla mantenimiento (registro de mantenimiento de equipos y áreas)
+CREATE TABLE mantenimiento (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_maquina INT,
+    descripcion VARCHAR(100),
+    fecha DATE,
+    FOREIGN KEY (id_maquina) REFERENCES maquina(id)
+);
+
+-- Tabla alimento (para registrar tipos de alimentos)
+CREATE TABLE alimento (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(100)
+);
+
+-- Tabla dieta (para registrar las dietas asignadas a los clientes)
+CREATE TABLE dieta (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_cliente INT NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    fechaAsignacion DATE NOT NULL,
+    descripcion VARCHAR(100),
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id)
+);
+
+-- Tabla dieta_alimento (asociación entre dieta y alimento)
+CREATE TABLE dieta_alimento (
+    id_dieta INT NOT NULL,
+    id_alimento INT NOT NULL,
+    cantidad DECIMAL(5, 2) NOT NULL, -- en gramos, por ejemplo
+    PRIMARY KEY (id_dieta, id_alimento),
+    FOREIGN KEY (id_dieta) REFERENCES dieta(id),
+    FOREIGN KEY (id_alimento) REFERENCES alimento(id)
+);
+
+CREATE TABLE mantenimiento (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     id_maquina INT,
+     descripcion VARCHAR(100),
+     fecha DATE,
+     FOREIGN KEY (id_maquina) REFERENCES maquina(id)
+ );
+
+
+-- Parte con correcciones
+
+-- Tabla persona (supertabla de cliente y empleado)
+CREATE TABLE persona (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    Nombre VARCHAR(50),
+    Apellido VARCHAR(50),
+    FechaNacimiento DATE,
+    Direccion VARCHAR(100),
+    Telefono VARCHAR(15),
+    Email VARCHAR(50)
+);
+
+-- Tabla plan (ahora definida antes de cliente)
+CREATE TABLE plan (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50),
+    costo DECIMAL(10, 2),
+    duracionMeses INT
+);
+
+-- Tabla cliente (subtabla de persona)
+CREATE TABLE cliente (
+    id INT PRIMARY KEY,
+    fechaRegistro DATE,
+    id_plan INT,
+    FOREIGN KEY (id) REFERENCES persona(id),
+    FOREIGN KEY (id_plan) REFERENCES plan(id) ON DELETE SET NULL -- Si se elimina un plan, se pone a NULL el id_plan en cliente
+);
+
+-- Tabla empleado (subtabla de persona)
+CREATE TABLE empleado (
+    id INT PRIMARY KEY,
+    puesto VARCHAR(50),
+    salario DECIMAL(10, 2),
+    fechaContratacion DATE,
+    FOREIGN KEY (id) REFERENCES persona(id) ON DELETE CASCADE -- Aseguramos la eliminación en cascada para empleado
+);
+
+-- Tabla promocion
+CREATE TABLE promocion (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    descripcion VARCHAR(100),
+    descuento DECIMAL(5, 2),
+    fechaInicio DATE,
+    fechaFin DATE
+);
+
+-- Tabla cliente_promocion (asociación entre cliente y promocion)
+CREATE TABLE cliente_promocion (
+    id_cliente INT,
+    id_promocion INT,
+    PRIMARY KEY (id_cliente, id_promocion),
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id),
+    FOREIGN KEY (id_promocion) REFERENCES promocion(id)
+);
+
+-- Tabla fichaMedica (para el seguimiento de salud de los clientes)
+CREATE TABLE fichaMedica (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_cliente INT,
+    peso DECIMAL(5, 2),
+    talla DECIMAL(5, 2),
+    porcentajeGrasaCorporal DECIMAL(5, 2),
+    fechaRegistro DATE,
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id),
+    CONSTRAINT chk_peso CHECK (peso > 0),
+    CONSTRAINT chk_talla CHECK (talla > 0),
+    CONSTRAINT chk_grasa CHECK (porcentajeGrasaCorporal >= 0 AND porcentajeGrasaCorporal <= 100)
+);
+
+-- Tabla area (para las áreas dentro del gimnasio)
+CREATE TABLE area (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50),
+    descripcion VARCHAR(100)
+);
+
+-- Tabla maquina (para los equipos de gimnasio)
+CREATE TABLE maquina (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50),
+    id_area INT,
+    fechaAdquisicion DATE,
+    FOREIGN KEY (id_area) REFERENCES area(id),
+    CONSTRAINT chk_fechaAdquisicion CHECK (fechaAdquisicion <= CURDATE()) -- Validación de fecha
+);
+
+-- Tabla mantenimiento (registro de mantenimiento de equipos y áreas)
+CREATE TABLE mantenimiento (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_maquina INT,
+    descripcion VARCHAR(100),
+    fecha DATE,
+    FOREIGN KEY (id_maquina) REFERENCES maquina(id)
+);
+
+-- Tabla alimento (para registrar tipos de alimentos)
+CREATE TABLE alimento (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion VARCHAR(100)
+);
+
+-- Tabla dieta (para registrar las dietas asignadas a los clientes)
+CREATE TABLE dieta (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_cliente INT NOT NULL,
+    nombre VARCHAR(50) NOT NULL,
+    fechaAsignacion DATE NOT NULL,
+    descripcion VARCHAR(100),
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id)
+);
+
+-- Tabla dieta_alimento (asociación entre dieta y alimento)
+CREATE TABLE dieta_alimento (
+    id_dieta INT NOT NULL,
+    id_alimento INT NOT NULL,
+    cantidad DECIMAL(5, 2) NOT NULL, -- en gramos, por ejemplo
+    PRIMARY KEY (id_dieta, id_alimento),
+    FOREIGN KEY (id_dieta) REFERENCES dieta(id),
+    FOREIGN KEY (id_alimento) REFERENCES alimento(id)
+);
+
+-- Creación de índices en tablas con claves foráneas compuestas para mejorar el rendimiento
+CREATE INDEX idx_cliente_promocion_cliente ON cliente_promocion(id_cliente);
+CREATE INDEX idx_cliente_promocion_promocion ON cliente_promocion(id_promocion);
+CREATE INDEX idx_dieta_alimento_dieta ON dieta_alimento(id_dieta);
+CREATE INDEX idx_dieta_alimento_alimento ON dieta_alimento(id_alimento);
+
+-- Índice en la tabla empleado si consultas frecuentes usan puesto o salario
+CREATE INDEX idx_empleado_puesto ON empleado(puesto);
+CREATE INDEX idx_empleado_salario ON empleado(salario);

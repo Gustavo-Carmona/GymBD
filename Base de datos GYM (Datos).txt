@@ -1,0 +1,114 @@
+1. Tabla administrador (Creación y Datos)
+-- Insertar datos en la tabla administrador
+INSERT INTO administrador (Nombre, Contrasena) VALUES
+('Gustavo Carmona', 'Gus123'),
+('Josue Wences', 'Wen456'),
+('Victor Ayon', 'Vic789');
+
+2. Tabla persona (Datos)
+
+-- Insertar datos en la tabla persona
+INSERT INTO persona (Nombre, Apellido, FechaNacimiento, Direccion, Telefono, Email) VALUES
+('Carlos', 'López', '1990-05-10', 'Calle Ficticia 123', '555-1234567', 'carlos.lopez@email.com'),
+('María', 'Pérez', '1985-08-22', 'Av. Libertad 456', '555-2345678', 'maria.perez@email.com'),
+('Luis', 'Martínez', '1992-12-01', 'Calle Luna 789', '555-3456789', 'luis.martinez@email.com');
+
+3. Tabla plan (Datos)
+
+-- Insertar datos en la tabla plan
+INSERT INTO plan (nombre, costo, duracionMeses) VALUES
+('Plan Básico', 30.00, 1),
+('Plan Avanzado', 50.00, 3),
+('Plan Premium', 80.00, 6);
+
+4. Tabla cliente (Datos)
+
+-- Insertar datos en la tabla cliente (Nota: Asegurarse de que los ids en persona sean 1, 2, 3)
+INSERT INTO cliente (id, fechaRegistro, id_plan) VALUES
+(1, '2024-01-01', 1),
+(2, '2024-02-15', 2),
+(3, '2024-03-10', 3);
+
+5. Tabla empleado (Datos)
+
+-- Insertar datos en la tabla empleado (Nota: Asegurarse de que los ids en persona sean 1, 2, 3)
+INSERT INTO empleado (id, puesto, salario, fechaContratacion) VALUES
+(1, 'Entrenador', 1500.00, '2020-06-01'),
+(2, 'Recepcionista', 1200.00, '2022-03-15'),
+(3, 'Gerente', 2500.00, '2019-09-20');
+
+6. Tabla promocion (Datos)
+
+-- Insertar datos en la tabla promocion
+INSERT INTO promocion (descripcion, descuento, fechaInicio, fechaFin) VALUES
+('Descuento por primer mes', 15.00, '2024-01-01', '2024-01-31'),
+('Descuento de verano', 20.00, '2024-06-01', '2024-06-30'),
+('Promoción por referir amigos', 10.00, '2024-03-01', '2024-03-31');
+
+7. Tabla cliente_promocion (Datos)
+
+-- Insertar datos en la tabla cliente_promocion
+INSERT INTO cliente_promocion (id_cliente, id_promocion) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
+
+8. Tabla fichaMedica (Datos)
+
+-- Insertar datos en la tabla fichaMedica
+INSERT INTO fichaMedica (id_cliente, peso, talla, porcentajeGrasaCorporal, fechaRegistro) VALUES
+(1, 75.50, 1.75, 18.5, '2024-01-01'),
+(2, 68.30, 1.60, 20.0, '2024-02-15'),
+(3, 82.10, 1.80, 22.3, '2024-03-10');
+
+9. Tabla area (Datos)
+
+-- Insertar datos en la tabla area
+INSERT INTO area (nombre, descripcion) VALUES
+('Cardio', 'Área con máquinas de cardio como cintas y bicicletas'),
+('Fuerza', 'Área con pesas y máquinas para entrenamiento de fuerza'),
+('Estudio', 'Área para clases grupales como yoga o pilates');
+
+10. Tabla maquina (Datos)
+
+-- Insertar datos en la tabla maquina
+INSERT INTO maquina (nombre, id_area, fechaAdquisicion) VALUES
+('Cinta de correr', 1, '2023-11-15'),
+('Bicicleta estática', 1, '2023-10-10'),
+('Máquina de press de banca', 2, '2022-05-22'),
+('Máquina de remo', 2, '2021-08-13');
+
+11. Tabla mantenimiento (Datos)
+
+-- Insertar datos en la tabla mantenimiento
+INSERT INTO mantenimiento (id_maquina, descripcion, fecha) VALUES
+(1, 'Revisión general', '2024-05-10'),
+(2, 'Cambio de correas', '2024-04-05'),
+(3, 'Mantenimiento preventivo', '2024-02-20');
+
+12. Tabla alimento (Datos)
+
+-- Insertar datos en la tabla alimento
+INSERT INTO alimento (nombre, descripcion) VALUES
+('Pollo', 'Fuente de proteína magra'),
+('Arroz integral', 'Carbohidrato de bajo índice glucémico'),
+('Aguacate', 'Grasa saludable rica en ácidos grasos monoinsaturados');
+
+13. Tabla dieta (Datos)
+
+-- Insertar datos en la tabla dieta
+INSERT INTO dieta (id_cliente, nombre, fechaAsignacion, descripcion) VALUES
+(1, 'Dieta alta en proteínas', '2024-01-02', 'Dieta enfocada en el aumento de masa muscular'),
+(2, 'Dieta balanceada', '2024-02-16', 'Dieta equilibrada para mantener peso y energía'),
+(3, 'Dieta para pérdida de grasa', '2024-03-11', 'Dieta baja en carbohidratos para reducir porcentaje de grasa');
+
+14. Tabla dieta_alimento (Datos)
+
+-- Insertar datos en la tabla dieta_alimento
+INSERT INTO dieta_alimento (id_dieta, id_alimento, cantidad) VALUES
+(1, 1, 200.00),
+(1, 2, 150.00),
+(2, 1, 150.00),
+(2, 3, 100.00),
+(3, 2, 100.00),
+(3, 3, 80.00);
